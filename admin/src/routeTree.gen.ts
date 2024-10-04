@@ -11,19 +11,37 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AdminImport } from './routes/_admin'
 import { Route as IndexImport } from './routes/index'
-import { Route as UIndexImport } from './routes/u/index'
+import { Route as AuthForgotPasswordImport } from './routes/_auth/forgotPassword'
+import { Route as AuthCreateAdminImport } from './routes/_auth/createAdmin'
+import { Route as AdminDashboardImport } from './routes/_admin/dashboard'
 
 // Create/Update Routes
+
+const AdminRoute = AdminImport.update({
+  id: '/_admin',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const UIndexRoute = UIndexImport.update({
-  path: '/u/',
+const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
+  path: '/forgotPassword',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthCreateAdminRoute = AuthCreateAdminImport.update({
+  path: '/createAdmin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminDashboardRoute = AdminDashboardImport.update({
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -37,11 +55,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/u/': {
-      id: '/u/'
-      path: '/u'
-      fullPath: '/u'
-      preLoaderRoute: typeof UIndexImport
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
+    }
+    '/_admin/dashboard': {
+      id: '/_admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AdminDashboardImport
+      parentRoute: typeof AdminImport
+    }
+    '/_auth/createAdmin': {
+      id: '/_auth/createAdmin'
+      path: '/createAdmin'
+      fullPath: '/createAdmin'
+      preLoaderRoute: typeof AuthCreateAdminImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/forgotPassword': {
+      id: '/_auth/forgotPassword'
+      path: '/forgotPassword'
+      fullPath: '/forgotPassword'
+      preLoaderRoute: typeof AuthForgotPasswordImport
       parentRoute: typeof rootRoute
     }
   }
@@ -49,39 +88,68 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AdminRouteChildren {
+  AdminDashboardRoute: typeof AdminDashboardRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminDashboardRoute: AdminDashboardRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/u': typeof UIndexRoute
+  '': typeof AdminRouteWithChildren
+  '/dashboard': typeof AdminDashboardRoute
+  '/createAdmin': typeof AuthCreateAdminRoute
+  '/forgotPassword': typeof AuthForgotPasswordRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/u': typeof UIndexRoute
+  '': typeof AdminRouteWithChildren
+  '/dashboard': typeof AdminDashboardRoute
+  '/createAdmin': typeof AuthCreateAdminRoute
+  '/forgotPassword': typeof AuthForgotPasswordRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/u/': typeof UIndexRoute
+  '/_admin': typeof AdminRouteWithChildren
+  '/_admin/dashboard': typeof AdminDashboardRoute
+  '/_auth/createAdmin': typeof AuthCreateAdminRoute
+  '/_auth/forgotPassword': typeof AuthForgotPasswordRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/u'
+  fullPaths: '/' | '' | '/dashboard' | '/createAdmin' | '/forgotPassword'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/u'
-  id: '__root__' | '/' | '/u/'
+  to: '/' | '' | '/dashboard' | '/createAdmin' | '/forgotPassword'
+  id:
+    | '__root__'
+    | '/'
+    | '/_admin'
+    | '/_admin/dashboard'
+    | '/_auth/createAdmin'
+    | '/_auth/forgotPassword'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  UIndexRoute: typeof UIndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AuthCreateAdminRoute: typeof AuthCreateAdminRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  UIndexRoute: UIndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AuthCreateAdminRoute: AuthCreateAdminRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +165,29 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/u/"
+        "/_admin",
+        "/_auth/createAdmin",
+        "/_auth/forgotPassword"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/u/": {
-      "filePath": "u/index.tsx"
+    "/_admin": {
+      "filePath": "_admin.tsx",
+      "children": [
+        "/_admin/dashboard"
+      ]
+    },
+    "/_admin/dashboard": {
+      "filePath": "_admin/dashboard.tsx",
+      "parent": "/_admin"
+    },
+    "/_auth/createAdmin": {
+      "filePath": "_auth/createAdmin.tsx"
+    },
+    "/_auth/forgotPassword": {
+      "filePath": "_auth/forgotPassword.tsx"
     }
   }
 }

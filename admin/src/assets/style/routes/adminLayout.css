@@ -1,0 +1,91 @@
+.layoutSet{
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    height: 100vh;
+    overflow: hidden;
+
+    .layoutLeft{
+        border-right: 1px solid rgba(128, 128, 128, 0.204);
+        .listWrap{
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 10px 20px 20px;
+
+            .listMain{
+                .logoInfo{
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    .logo{
+                        height: 30px;
+                        width: 30px;
+                    }
+                }
+
+                .list{
+                    margin-top: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    a{
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        padding: 10px 15px;
+                        letter-spacing: .5px;
+                        opacity: .6;
+
+                        p{
+                            font-weight: 500;
+                            font-size: .8rem;
+                        }
+                    }
+                    a:hover{
+                        opacity: 1;
+                        background: rgba(68, 68, 68, 0.267);
+                        border-radius: 10px;
+                    }
+                    .active{
+                        background: rgba(68, 68, 68, 0.267);
+                        opacity: 1;
+                        border-radius: 10px;
+                    }
+                }
+
+                .listProfile{
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    background: rgba(68, 68, 68, 0.267);
+                    border-radius: 10px;
+                    padding: 10px 15px;
+                    margin-top: 10px;
+
+                    .o{
+                        height: 28px;
+                        width: 28px;
+                        background: orangered;
+                        border-radius: 100px;
+                    }
+                    .oContent{
+                        p:nth-child(1){
+                            font-size: .9rem;
+                            font-weight: 600;
+                        }
+                        p:nth-child(2){
+                            font-size: .75rem;
+                            margin-top: -4px;
+                            opacity: .8;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .layoutRight{
+        padding: 30px 20px 20px 20px;
+    }
+}
